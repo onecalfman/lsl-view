@@ -4,6 +4,16 @@ Web UI for discovering and viewing Lab Streaming Layer (LSL) streams on your loc
 
 Because browsers cannot speak the LSL protocol directly (UDP multicast discovery + data transport), this repo includes a small backend relay that uses `pylsl` to read streams and forward samples to the browser via WebSocket.
 
+## Quickstart
+
+Run the webpage and backend with this command:
+
+```sh
+curl -sSL https://raw.githubusercontent.com/onecalfman/lsl-view/main/docker-compose-release.yml | docker compose -f - up -d
+```
+
+It will launch on localhost:4321
+
 ## Features
 
 - Discover streams on your LAN (`/api/streams`)

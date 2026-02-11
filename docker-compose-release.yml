@@ -1,0 +1,23 @@
+services:
+  backend:
+    image: ghcr.io/onecalfman/lsl-view-backend:latest
+    container_name: lslview-backend
+    # Host networking is required for LSL UDP multicast discovery on Linux
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Optional: Change where recordings are stored
+      - LSLVIEW_RECORDINGS_DIR=/app/recordings
+    volumes:
+      - ./recordings:/app/recordings
+
+  frontend:
+    image: ghcr.io/onecalfman/lsl-view-frontend:latest
+    container_name: lslview-frontend
+    ports:
+      - "4321:80"
+    restart: unless-stopped
+    # Maps the "backend" hostname in nginx.conf to the host's IP
+    extra_hosts:
+      - "backend:host-gateway"
