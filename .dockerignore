@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.git/
+.gitignore
+__pycache__/
+*.pyc
+.venv/
+backend/.venv/
+mock-lsl-stream/.venv/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

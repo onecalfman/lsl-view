@@ -1,0 +1,40 @@
+# Development compose — hot-reload frontend + backend
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build
+#
+# Or run services natively for the best DX:
+#   Terminal 1: cd backend && uv run python server.py
+#   Terminal 2: pnpm dev
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lslview-backend-dev
+    network_mode: host
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend/server.py:/app/server.py
+
+  frontend-dev:
+    image: node:22-slim
+    container_name: lslview-frontend-dev
+    working_dir: /app
+    command: >
+      sh -c "corepack enable &&
+             corepack prepare pnpm@latest --activate &&
+             pnpm install &&
+             pnpm dev"
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    extra_hosts:
+      - "backend:host-gateway"
+    environment:
+      - NODE_ENV=development
+      - LSLVIEW_BACKEND_URL=http://backend:8765

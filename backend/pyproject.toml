@@ -1,0 +1,11 @@
+[project]
+name = "lslview-backend"
+version = "1.0.0"
+description = "LSL WebSocket relay backend for LSLView"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pylsl>=1.16.0",
+    "websockets>=14.0",
+]

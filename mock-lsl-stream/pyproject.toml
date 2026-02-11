@@ -1,0 +1,15 @@
+[project]
+name = "mock-lsl-stream"
+version = "0.1.0"
+description = "Mock LSL stream generator for testing"
+requires-python = ">=3.8"
+dependencies = [
+    "pylsl",
+    "numpy",
+]
+
+[project.scripts]
+mock-lsl = "mock_lsl_stream:main"
+
+[tool.uv]
+dev-dependencies = []

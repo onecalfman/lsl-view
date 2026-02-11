@@ -1,0 +1,40 @@
+# LSLView Docker Compose
+#
+# IMPORTANT: LSL uses UDP multicast for stream discovery. The backend
+# container needs to see the same network as your LSL sources.
+#
+# Usage:
+#   docker compose up --build
+#
+# On Linux: uses host networking (recommended) for LSL multicast discovery.
+# On Windows/macOS Docker Desktop: host networking is not fully supported.
+#   Instead, run the backend natively:
+#     cd backend && uv run python server.py
+#   And use only the frontend container:
+#     docker compose up frontend --build
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lslview-backend
+    # Host networking lets pylsl discover LSL streams via UDP multicast.
+    # This only works on Linux. On Windows/macOS, run the backend natively.
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: lslview-frontend
+    ports:
+      - "4321:80"
+    restart: unless-stopped
+    # When backend uses host networking, it's reachable at host IP.
+    # The nginx config uses "backend" as upstream, resolved via extra_hosts.
+    extra_hosts:
+      - "backend:host-gateway"
